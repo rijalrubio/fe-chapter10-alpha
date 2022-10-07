@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router'
 import React, { useState } from "react";
 import _axios from "../../helper/axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 
 const Register = () => {
-
+    const MySwal = withReactContent(Swal);
     const [values, setValues] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
@@ -12,7 +15,7 @@ const Register = () => {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
         _axios
           .post("/user/register", values, {headers: {
@@ -21,7 +24,11 @@ const Register = () => {
           .then((res) => {
             router.push(`/login`);
           })
-          .catch((err) => err);
+          .catch((err) => MySwal.fire({
+            title: <p>{err.data.message || err.data.msg}</p>,
+            icon: "error",
+          })
+          )
     };
 
     const togglePasswordVisibility = () => {
@@ -40,7 +47,7 @@ const Register = () => {
                     Register
                     </h2>
                 </div>
-                <form className="mt-4 space-y-6" action="#" method="POST">
+                <form className="mt-4 space-y-6" action="#" method="POST" onSubmit={onSubmit}>
                     <input type="hidden" name="remember" defaultValue="true" />
                     <div className="-space-y-px">
                         <div>
@@ -97,7 +104,6 @@ const Register = () => {
                         <button
                             type="submit"
                             className="group relative flex w-full justify-center rounded-md border border-transparent bg-violet-600 mt-6 py-2 px-4 text-sm font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
-                            onClick={handleSubmit}
                         >
                             Register
                         </button>
