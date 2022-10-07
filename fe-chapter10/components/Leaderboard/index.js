@@ -32,11 +32,11 @@ export default function Leaderboard() {
     <div className="w-full">
       <div className="flex flex-col">
         <div className="overflow-x-auto">
-          <h1 className="font-bold uppercase px-2">Leaderboard 👑</h1>
+          <h2 className="text-2xl font-bold text-gray-900">Leaderboard 👑</h2>
           <div className="p-1.5 w-full inline-block align-middle">
             <div className="overflow-hidden border rounded-lg">
               <table className="min-w-full shadow-md divide-y divide-gray-200">
-                <thead className="bg-blue-400">
+                <thead className="bg-indigo-600">
                   <tr>
                     <th
                       scope="col"

@@ -7,20 +7,17 @@ function Game() {
     <>
     <div className="bg-gray-100">
       {/* <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 "> */}
-        <div class="mx-auto flex flex-col md:flex-row w-11/12 align-middle object-center">
-          <div class="column-2 w-full md:w-6/12 h-full border-2 border-dashed md:mx-2 my-2 rounded-md">
+      <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
+        <div className="mx-auto flex flex-col md:flex-row w-10/12 align-middle object-center">
+          <div className="column-2 w-full md:w-8/12 h-full border-2 border-dashed md:mx-2 my-2 rounded-md">
             <ListGames />
           </div>
-          <div class="column-3 w-full md:w-4/12 h-full border-2 border-dashed md:mx-2 my-2 rounded-md">
+          <div className="column-3 w-full md:w-4/12 h-full border-2 border-dashed md:mx-2 my-2 rounded-md">
             <Leaderboard />
           </div> 
       </div>  
-      {/* </div> */}
+      </div>
     </div>
-    
-    
-    
-  
     </>
   );
 }
