@@ -1,10 +1,15 @@
 import jwtDecode from "jwt-decode";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useCookies} from "react-cookie";
 import _axios from "../helper/axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import {useRouter} from "next/router"
+import {useSelector, useDispatch } from 'react-redux';
+import { setLogin } from "../share/redux/authSlice";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons'
+
 
 function login() {
     const [values, setValues] = useState({});
@@ -12,6 +17,12 @@ function login() {
     const [cookies, setCookies] = useCookies(["accessToken", "userId"]);
     const MySwal = withReactContent(Swal);
     const router = useRouter();
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth);
+    useEffect(() => {
+      if (auth.isLoggedIn) router.push("/");
+    }, []);
+    console.log(auth);
 
     const handleChange = (e) => {
       setValues({ ...values, [e.target.name]: e.target.value });
@@ -27,47 +38,59 @@ function login() {
           setCookies("accessToken", accessToken, { maxAge: 60000 });
           const userId = jwtDecode(accessToken);
           setCookies("userId", userId);
+          dispatch(setLogin(accessToken));
           router.push("/");
         }
       })
       .catch((err) => {
+        let message = "";
+        if(err.response){
+          err.response.data.errors.forEach(element => {
+            message = message.concat(element.msg, " ");
+          });
+        }else{          
+          message = err.data.message
+        }
+         
         MySwal.fire({
-          title: <p>{err.data.message || err.data.msg}</p>,
+          title: <p>{message}</p>,
           icon: "error",
         });
       });
   };
 
     return (
-        <div className="min-h-screen bg-gray-300">
+        <div className="bg-gradient-to-b from-blue-800 via-indigo-800 to-purple-800">
           <div className="flex h-screen justify-center items-center">
-            <div className="w-80 rounded-lg overflow-hidden shadow-2xl m-4 bg-gray-100">
+            <div className="w-80 rounded-lg overflow-hidden shadow-2xl m-4 bg-teal-100/75">
               <div className="px-6 py-4">
-                <label className="block text-gray-800 text-sm font-bold mb-2">
-                  Email
-                </label>
+              <span className="text-xl justify-center items-center flex font-bold">Member Login</span>
+              </div>
+              <div className="px-6 py-4 relative">
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded-lg w-full py-2 pr-3 pl-9 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="email"
                   type="email"
                   placeholder="Email"
                    onChange={handleChange}
                 />
+                <span className="flex items-center absolute text-zinc-500 w-full h-full pointer-events-none pl-9 bottom-0 left-0">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                </span>
+                
               </div>
               <div className="px-6 pt-4 mb-4">
-                <label className="block text-gray-800 text-sm font-bold mb-2">
-                  Password
-                </label>
                 <div className="flex justify-between">
                   <div className="relative w-full">
                      <form onSubmit={handleSubmit}> 
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        name="password"
-                        type={!showPassword ? "password" : "text"}
-                        placeholder="*********"
-                         onChange={handleChange}
+                        className="shadow appearance-none border rounded-lg w-full py-2 px-9 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        name="password" type={!showPassword ? "password" : "text"}
+                        placeholder="*********" onChange={handleChange}
                       />
+                      <span className="flex items-center absolute text-zinc-500 w-full h-full pointer-events-none pl-3 bottom-0 left-0">
+                        <FontAwesomeIcon icon={faLock} />
+                      </span>
                       <label
                         className="absolute inset-y-2 right-0 pr-2 text-sm leading-5"
                          onClick={() => setShowPassword(!showPassword)}
@@ -102,7 +125,7 @@ function login() {
               </div>
               <div className="px-6 py-4">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
                   onClick={handleSubmit}
                 >
