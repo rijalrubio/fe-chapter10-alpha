@@ -11,7 +11,7 @@ export default function Room() {
   const [cookies] = useCookies(['accessToken', 'userId']);
   // const authToken = cookies.accessToken;
   const authToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZnVsbG5hbWUiOiJSaWphbCBSdWJpIiwiZW1haWwiOiJyaWphbHJ1YmlvQGdtYWlsLmNvbSIsImlhdCI6MTY2NTI5NjExNSwiZXhwIjoxNjY1MzgyNTE1fQ.JtVGjxdDwN-dHaux9mkmzDDWGuWpSyxJgeCmZpQz2GE';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZnVsbG5hbWUiOiJSaWphbCBSdWJpIiwiZW1haWwiOiJyaWphbHJ1YmlvQGdtYWlsLmNvbSIsImlhdCI6MTY2NTU3NzM5OSwiZXhwIjoxNjY1NjYzNzk5fQ.fpn0B5ypuagGamY2Mpt83Zvlx6CYRftxI8rD31PUs8E';
 
   const fetchRooms = () => {
     _axios
