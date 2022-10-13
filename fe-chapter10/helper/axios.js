@@ -2,12 +2,12 @@ import axios from 'axios';
 
 // Full config:  https://github.com/axios/axios#request-config
 axios.defaults.baseURL =
-  process.env.REACT_APP_API_URL || process.env.apiUrl || '';
+  process.env.NEXT_PUBLIC_API_URL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
-  baseURL: process.env.REACT_APP_API_URL || '',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || '',
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
