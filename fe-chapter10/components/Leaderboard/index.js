@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import _axios from "../../helper/axios";
+import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import _axios from '../../helper/axios';
 // import axios from "axios";
 
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
-  const [cookies] = useCookies(["accessToken"]);
+  const [cookies] = useCookies(['accessToken']);
   const authToken = cookies.accessToken;
   const getUsers = () => {
     _axios
-      .get("/leaderboard", {
-      // axios
-      //   .get("https://service-games.herokuapp.com/leaderboard", {
+      .get('/leaderboard', {
+        // axios
+        //   .get("https://service-games.herokuapp.com/leaderboard", {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -20,7 +20,7 @@ export default function Leaderboard() {
         setUsers(res.data);
       })
       .catch((err) => {
-        console.log("err: " + err);
+        console.log('err: ' + err);
       });
   };
 
