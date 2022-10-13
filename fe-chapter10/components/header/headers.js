@@ -7,14 +7,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLogin, setLogout } from "../../share/redux/authSlice";
 
 const navigationUser = [
-  { key: "home", name: "Home", href: "#", current: true },
+  { key: "home", name: "Home", href: "/", current: true },
   { key: "list-games", name: "List Games", href: "#", current: false },
   { key: "room-game", name: "Room Games", href: "#", current: false },
 ];
 
 const navigationVisitor = [
   { key: "login", name: "Login", href: "login", current: false },
-  { key: "register", name: "Register", href: "#", current: false },
+  { key: "register", name: "Register", href: "register", current: false },
 ];
 
 function classNames(...classes) {
@@ -22,17 +22,9 @@ function classNames(...classes) {
 }
 
 export default function Header() {
-  const [cookies, removeCookie] = useCookies(["accessToken", "userId"]);
+  const [cookies] = useCookies(["accessToken", "userId"]);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  // handle refresh
-
-  // useEffect(()=>{
-  //   if (cookies.accessToken) {
-  //     dispatch(setLogin(cookies.accessToken));
-  //   }
-  // },[]);
 
   // handle logout
   const handleLogout = () => {
