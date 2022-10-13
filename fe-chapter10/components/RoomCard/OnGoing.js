@@ -24,9 +24,11 @@ export default function OnGoing({ room, onClick }) {
           <div className="flex justify-between w-56 items-center">
             {room.roomCode}
           </div>
-          <div className="flex justify-between w-56 items-center">
-            <p className="font-semibold text-lg">{room.roomName}</p>
-            <p className="text-slate-600 text-sm">
+          <div className="flex justify-between w-56 items-center pt-2">
+            <p className="font-semibold text-lg leading-normal">
+              {room.roomName}
+            </p>
+            <p className="text-slate-600 text-sm leading-normal">
               {isMyTurn ? 'Your Turn' : 'Enemy Turn'}
             </p>
           </div>

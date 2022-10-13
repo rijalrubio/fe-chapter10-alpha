@@ -8,8 +8,7 @@ export default function Finished({ room, onClick }) {
   const isDraw = room.hostScore === room.guestScore;
   const [hostName, setHostName] = useState('');
   const [guestName, setGuestName] = useState('');
-  const authToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZnVsbG5hbWUiOiJSaWphbCBSdWJpIiwiZW1haWwiOiJyaWphbHJ1YmlvQGdtYWlsLmNvbSIsImlhdCI6MTY2NTI5NjExNSwiZXhwIjoxNjY1MzgyNTE1fQ.JtVGjxdDwN-dHaux9mkmzDDWGuWpSyxJgeCmZpQz2GE';
+  const authToken = cookies.accessToken;
 
   const fetchRoomById = () => {
     _axios
@@ -24,7 +23,7 @@ export default function Finished({ room, onClick }) {
         setGuestName(response.guestUserName);
       })
       .catch((err) => {
-        console.log(err.data.message || err.data.msg);
+        console.log(err.response.data.message || err.data.msg);
       });
   };
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function Finished({ room, onClick }) {
   const isWin = room.hostScore > room.guestScore ? hostName : guestName;
   // (cookies.userId.id === room.guestScore && room.hostScore < room.guestScore ? guestName : '');
   return (
-    <Link href={{ pathname: `/rooms/${room.id}` }}>
+    <Link href={{ pathname: `/list-games/rooms/${room.id}` }}>
       <a>
         {isDraw ? (
           <div
@@ -44,9 +43,11 @@ export default function Finished({ room, onClick }) {
             <div className="flex justify-between w-56 items-center">
               {room.roomCode}
             </div>
-            <div className="flex justify-between w-56 items-center">
-              <p className="font-semibold text-lg">{room.roomName}</p>
-              <p className="text-slate-900 text-sm">Draw</p>
+            <div className="flex justify-between w-56 items-center pt-2">
+              <p className="font-semibold text-lg leading-normal">
+                {room.roomName}
+              </p>
+              <p className="text-slate-900 text-sm leading-normal">Draw</p>
             </div>
             <p className="text-4xl text-center mt-4">
               {room.hostScore} - {room.guestScore}
@@ -62,11 +63,11 @@ export default function Finished({ room, onClick }) {
                 <div className="flex justify-between w-56 items-center text-white">
                   {room.roomCode}
                 </div>
-                <div className="flex justify-between w-56 items-center">
-                  <p className="font-bold text-white text-lg">
+                <div className="flex justify-between w-56 items-center pt-2">
+                  <p className="font-bold text-white text-lg leading-normal">
                     {room.roomName}
                   </p>
-                  <p className="text-white font-semibold text-sm">
+                  <p className="text-white font-semibold text-sm leading-normal">
                     Winner: {isWin}
                   </p>
                 </div>

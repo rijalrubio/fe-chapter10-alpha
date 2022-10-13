@@ -1,3 +1,5 @@
+import Leaderboard from './Leaderboard';
+import ListGames from './ListGames';
 import RoomCard from './RoomCard';
 
-export { RoomCard };
+export { Leaderboard, ListGames, RoomCard };

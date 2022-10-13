@@ -1,17 +1,15 @@
-import { RoomCard } from '../../components';
+import { RoomCard } from '../../../components';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
-import _axios from '../../helper/axios';
+import _axios from '../../../helper/axios';
 
 export default function Room() {
   const [rooms, setRooms] = useState([]);
   const router = useRouter();
   const [cookies] = useCookies(['accessToken', 'userId']);
-  // const authToken = cookies.accessToken;
-  const authToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZnVsbG5hbWUiOiJSaWphbCBSdWJpIiwiZW1haWwiOiJyaWphbHJ1YmlvQGdtYWlsLmNvbSIsImlhdCI6MTY2NTU3NzM5OSwiZXhwIjoxNjY1NjYzNzk5fQ.fpn0B5ypuagGamY2Mpt83Zvlx6CYRftxI8rD31PUs8E';
+  const authToken = cookies.accessToken;
 
   const fetchRooms = () => {
     _axios
@@ -122,7 +120,7 @@ export default function Room() {
         .then((result) => {
           if (result.dismiss !== 'cancel') {
             _axios
-              .get(`/room/join/${room.roomCode}`, {
+              .get(`/rooms/join/${room.roomCode}`, {
                 headers: {
                   Authorization: `Bearer ${authToken}`,
                 },
@@ -131,7 +129,7 @@ export default function Room() {
                 const response = res.data;
                 const _roomId = response.room.id;
                 const room = response.room;
-                router.replace(`/room/${_roomId}`);
+                router.replace(`/list-games/rooms/${_roomId}`);
               })
               .catch((e) => {
                 alert(e);
@@ -144,14 +142,14 @@ export default function Room() {
           e.preventDefault();
         });
     } else {
-      router.replace(`/rooms/${room.id}`);
+      router.replace(`/list-games/rooms/${room.id}`);
       // navigate(`/rooms/${room.id}`, { state: room });
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="lg:container mx-auto px-8 ">
+      <div className="xl:container mx-auto">
         <div className="mt-4">
           <button
             className="py-2 w-[144px] rounded-lg mr-4 transition-colors bg-blue-500 text-white hover:bg-blue-700"
@@ -166,7 +164,7 @@ export default function Room() {
             Create Room
           </button>
         </div>
-        <div className="mt-8 flex flex-wrap gap-8">
+        <div className="mt-8 flex flex-wrap xl:gap-4">
           {rooms.map(function (room, i) {
             if (!room.guestUserId) {
               return (

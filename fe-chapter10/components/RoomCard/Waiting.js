@@ -8,9 +8,9 @@ export default function Waiting({ room, onClick }) {
       <div className="flex justify-between w-56 items-center">
         {room.roomCode}
       </div>
-      <div className="flex justify-between w-56 items-center">
-        <p className="font-semibold text-lg">{room.roomName}</p>
-        <p className="text-slate-600 text-sm">Waiting..</p>
+      <div className="flex justify-between w-56 items-center pt-2">
+        <p className="font-semibold text-lg leading-normal">{room.roomName}</p>
+        <p className="text-slate-600 text-sm leading-normal">Waiting..</p>
       </div>
       <p className="text-4xl text-center mt-4">
         {room.hostScore} - {room.guestScore}
