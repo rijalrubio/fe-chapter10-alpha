@@ -22,13 +22,14 @@ function classNames(...classes) {
 }
 
 export default function Header() {
-  const [cookies] = useCookies(["accessToken", "userId"]);
+  const [cookies, removeCookie] = useCookies(["accessToken", "userId"]);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   // handle logout
   const handleLogout = () => {
     console.log("proses logout");
+    removeCookie("accessToken", "");
     dispatch(setLogout());
   };
 

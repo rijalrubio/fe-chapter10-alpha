@@ -17,9 +17,18 @@ function login() {
   const MySwal = withReactContent(Swal);
   const router = useRouter();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
+  const {isLoggingIn, isLoggedIn} = useSelector((state) => state.auth);
+
   useEffect(() => {
-    if (auth.isLoggedIn) router.push('/');
+    if (isLoggedIn) {
+      router.push('/')
+    }
+  }, [useRouter, isLoggedIn])
+
+  useEffect(() => {
+    if (cookies.accessToken) {
+      dispatch(setLogin(cookies.accessToken));
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -127,14 +136,14 @@ function login() {
             </div>
           </div>
           <div className="px-6 py-4">
-            <button style={{display: !auth.isLoggingIn? "block":"none"}}
+            <button style={{display: !isLoggingIn? "block":"none"}}
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
               onClick={handleSubmit}
             >
               Login
             </button>
-            <button style={{display: auth.isLoggingIn? "flex":"none"}} 
+            <button style={{display: isLoggingIn? "flex":"none"}} 
               type="submit" className="bg-purple-500 inline-flex text-white font-bold px-4 py-2 leading-6  rounded focus:outline-none focus:shadow-outline" disabled>
               <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
