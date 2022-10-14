@@ -63,7 +63,7 @@ export default function ListGames() {
               </p>
               <div className="mt-6">
                 <div className="py-2">
-                  <Link href={{ pathname: `/list-games/rooms` }}>
+                  <Link href={{ pathname: `/rooms` }}>
                     <a className="group relative flex w-full justify-center rounded-md border border-violet-700 bg-transparent py-2 px-4 text-sm font-medium text-black hover:bg-violet-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2">
                       Player VS Player
                     </a>

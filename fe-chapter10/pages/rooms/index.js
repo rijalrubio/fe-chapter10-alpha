@@ -1,9 +1,9 @@
-import { RoomCard } from '../../../components';
+import { RoomCard } from '../../components';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
-import _axios from '../../../helper/axios';
+import _axios from '../../helper/axios';
 
 export default function Room() {
   const [rooms, setRooms] = useState([]);
@@ -129,7 +129,7 @@ export default function Room() {
                 const response = res.data;
                 const _roomId = response.room.id;
                 const room = response.room;
-                router.replace(`/list-games/rooms/${_roomId}`);
+                router.replace(`/rooms/${_roomId}`);
               })
               .catch((e) => {
                 alert(e);
@@ -142,7 +142,7 @@ export default function Room() {
           e.preventDefault();
         });
     } else {
-      router.replace(`/list-games/rooms/${room.id}`);
+      router.replace(`/rooms/${room.id}`);
       // navigate(`/rooms/${room.id}`, { state: room });
     }
   };

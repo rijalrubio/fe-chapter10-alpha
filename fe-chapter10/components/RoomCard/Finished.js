@@ -33,7 +33,7 @@ export default function Finished({ room, onClick }) {
   const isWin = room.hostScore > room.guestScore ? hostName : guestName;
   // (cookies.userId.id === room.guestScore && room.hostScore < room.guestScore ? guestName : '');
   return (
-    <Link href={{ pathname: `/list-games/rooms/${room.id}` }}>
+    <Link href={{ pathname: `/rooms/${room.id}` }}>
       <a>
         {isDraw ? (
           <div
