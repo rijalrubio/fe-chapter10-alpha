@@ -133,7 +133,7 @@ export default function Game() {
                 </button>
                 <button
                   onClick={() => console.log('Finish clicked')}
-                  className="px-8 py-2 border border-2 border-violet-600 rounded-lg text-violet-600 hover:bg-white transition"
+                  className="px-8 py-2 border-2 border-violet-600 rounded-lg text-violet-600 hover:bg-white transition"
                 >
                   Finish
                 </button>
