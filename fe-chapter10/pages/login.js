@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLogin } from '../share/redux/authSlice';
+import { setLogin, startLoggingIn, stopLoggingIn } from '../share/redux/authSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,9 +17,18 @@ function login() {
   const MySwal = withReactContent(Swal);
   const router = useRouter();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
+  const {isLoggingIn, isLoggedIn} = useSelector((state) => state.auth);
+
   useEffect(() => {
-    if (auth.isLoggedIn) router.push('/');
+    if (isLoggedIn) {
+      router.push('/')
+    }
+  }, [useRouter, isLoggedIn])
+
+  useEffect(() => {
+    if (cookies.accessToken) {
+      dispatch(setLogin(cookies.accessToken));
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -28,6 +37,7 @@ function login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(startLoggingIn());
     _axios
       .post('/auth/login', values)
       .then((res) => {
@@ -41,6 +51,7 @@ function login() {
         }
       })
       .catch((err) => {
+        dispatch(stopLoggingIn());
         let message = '';
         if (err.response) {
           err.response.data.errors.forEach((element) => {
@@ -125,12 +136,20 @@ function login() {
             </div>
           </div>
           <div className="px-6 py-4">
-            <button
+            <button style={{display: !isLoggingIn? "block":"none"}}
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
               onClick={handleSubmit}
             >
               Login
+            </button>
+            <button style={{display: isLoggingIn? "flex":"none"}} 
+              type="submit" className="bg-purple-500 inline-flex text-white font-bold px-4 py-2 leading-6  rounded focus:outline-none focus:shadow-outline" disabled>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
             </button>
           </div>
         </div>
