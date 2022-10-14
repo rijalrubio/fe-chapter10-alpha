@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { useCookies } from 'react-cookie';
+import { useSelector } from 'react-redux';
 
 export default function LandingPage() {
-  const [cookies] = useCookies(['accessToken', 'userId']);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   return (
     <>
       <main className="lg:container mx-auto text-center md:text-left">
@@ -24,24 +24,15 @@ export default function LandingPage() {
                 game you want to play then you'll instantly be able to play it.
                 Ready to play?
               </p>
-              {!cookies.accessToken ||
-                (!cookies.userId ? (
+              {
                   <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
-                    <Link href="/register">
+                    <Link href={ !isLoggedIn ? "/register" : "/list-games" }>
                       <div className="bg-indigo-500 hover:bg-indigo-600 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg">
-                        Register Now
+                      { !isLoggedIn ? "Register Now" :  "Play Now"}
                       </div>
                     </Link>
                   </div>
-                ) : (
-                  <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
-                    <Link href="/list-games">
-                      <div className="bg-indigo-500 hover:bg-indigo-600 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg">
-                        Play Now
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+              }
             </div>
           </div>
         </div>
