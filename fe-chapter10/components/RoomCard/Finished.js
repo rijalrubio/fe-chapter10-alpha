@@ -33,21 +33,21 @@ export default function Finished({ room, onClick }) {
   const isWin = room.hostScore > room.guestScore ? hostName : guestName;
   // (cookies.userId.id === room.guestScore && room.hostScore < room.guestScore ? guestName : '');
   return (
-    <Link href={{ pathname: `/rooms/${room.id}` }}>
+    <Link href={{ pathname: `/rooms/games/${room.id}` }}>
       <a>
         {isDraw ? (
           <div
             onClick={onClick}
-            className="bg-slate-500 hover:bg-slate-400 px-8 pt-4 pb-8 rounded-lg cursor-pointer"
+            className="bg-violet-600 hover:bg-violet-500 px-8 pt-4 pb-8 rounded-lg cursor-pointer"
           >
-            <div className="flex justify-between w-56 items-center">
+            <div className="flex justify-between w-56 items-center text-white">
               {room.roomCode}
             </div>
             <div className="flex justify-between w-56 items-center pt-2">
-              <p className="font-semibold text-lg leading-normal">
+              <p className="font-semibold text-lg leading-normal text-white">
                 {room.roomName}
               </p>
-              <p className="text-slate-900 text-sm leading-normal">Draw</p>
+              <p className="text-white text-sm leading-normal ">Draw</p>
             </div>
             <p className="text-4xl text-center mt-4">
               {room.hostScore} - {room.guestScore}
@@ -58,7 +58,7 @@ export default function Finished({ room, onClick }) {
             {isWin ? (
               <div
                 onClick={onClick}
-                className="bg-blue-900 hover:bg-blue-800 px-8 pt-4 pb-8 rounded-lg cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-500 px-8 pt-4 pb-8 rounded-lg cursor-pointer"
               >
                 <div className="flex justify-between w-56 items-center text-white">
                   {room.roomCode}

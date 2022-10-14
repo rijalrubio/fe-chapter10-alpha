@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline';
 import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLogin, setLogout } from '../../share/redux/authSlice';
+import { useRouter } from 'next/router';
 
 const navigationUser = [
   { key: 'home', name: 'Home', href: '/', current: true },
@@ -28,7 +29,8 @@ function classNames(...classes) {
 
 export default function Header() {
   const [cookies, removeCookie] = useCookies(['accessToken', 'userId']);
-  const auth = useSelector((state) => state.auth);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const router = useRouter();
   const dispatch = useDispatch();
 
   // handle logout
@@ -38,8 +40,13 @@ export default function Header() {
     dispatch(setLogout());
   };
 
-  if (auth.isLoggedIn) {
-    // console.log(auth.isLoggedIn);
+  useEffect(() => {
+    if (cookies.accessToken) {
+      dispatch(setLogin(cookies.accessToken));
+    }
+  }, []);
+
+  if (isLoggedIn) {
     return (
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => {
@@ -83,7 +90,7 @@ export default function Header() {
                           <Link href={item.href} key={item.key}>
                             <a
                               className={classNames(
-                                item.current
+                                item.href === router.pathname
                                   ? 'bg-gray-900 text-white'
                                   : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                 'px-3 py-2 rounded-md text-sm font-medium'
@@ -122,7 +129,7 @@ export default function Header() {
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <Menu.Item>
                             {({ active }) => (
-                              <Link href="#">
+                              <Link href="/profile">
                                 <a
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',

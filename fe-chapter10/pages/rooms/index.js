@@ -61,7 +61,7 @@ export default function Room() {
 
     _axios
       .post(
-        '/rooms/create',
+        '/room/create',
         { roomName },
         {
           headers: {
@@ -87,16 +87,17 @@ export default function Room() {
           return 'You need to write something!';
         } else {
           _axios
-            .get(`/rooms/join/${roomCode}`, {
+            .get(`/room/join/${value}`, {
               headers: {
                 Authorization: `Bearer ${authToken}`,
               },
             })
             .then((res) => {
               const response = res.data;
+              console.log(res);
               const _roomId = response.room.id;
               const room = response.room;
-              router.replace(`/rooms/${_roomId}`);
+              router.replace(`/rooms/games/${_roomId}`);
             })
             .catch((e) => {
               alert(e);
@@ -129,7 +130,7 @@ export default function Room() {
                 const response = res.data;
                 const _roomId = response.room.id;
                 const room = response.room;
-                router.replace(`/rooms/${_roomId}`);
+                router.replace(`/rooms/games/${_roomId}`);
               })
               .catch((e) => {
                 alert(e);
@@ -142,7 +143,7 @@ export default function Room() {
           e.preventDefault();
         });
     } else {
-      router.replace(`/rooms/${room.id}`);
+      router.replace(`/rooms/games/${room.id}`);
       // navigate(`/rooms/${room.id}`, { state: room });
     }
   };
@@ -150,21 +151,21 @@ export default function Room() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="xl:container mx-auto">
-        <div className="mt-4">
+        <div className="pt-4 px-4">
           <button
-            className="py-2 w-[144px] rounded-lg mr-4 transition-colors bg-blue-500 text-white hover:bg-blue-700"
+            className="py-2 w-[144px] rounded-lg mr-4 transition-colors bg-indigo-500 text-white hover:bg-indigo-700"
             onClick={handleJoin}
           >
             Join Game
           </button>
           <button
-            className="py-2 w-[144px] rounded-lg transition-colors border border-blue-500 text-blue-500 hover:bg-gray-200"
+            className="py-2 w-[144px] rounded-lg transition-colors border border-indigo-500 text-indigo-500 hover:bg-gray-200"
             onClick={handleCreate}
           >
             Create Room
           </button>
         </div>
-        <div className="mt-8 flex flex-wrap xl:gap-4">
+        <div className="mt-8 flex flex-wrap xl:gap-4 lg:gap-3 md:gap-2 px-4">
           {rooms.map(function (room, i) {
             if (!room.guestUserId) {
               return (

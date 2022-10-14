@@ -1,6 +1,8 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { useCookies } from 'react-cookie';
 
 export default function LandingPage() {
+  const [cookies] = useCookies(['accessToken', 'userId']);
   return (
     <>
       <main className="lg:container mx-auto text-center md:text-left">
@@ -19,15 +21,27 @@ export default function LandingPage() {
               </h1>
               <p className="text-xl mt-4 text-slate-500 w-full md:w-2/3">
                 To play, you don't have to install anything. Just choose the
-                game you want to play then you'll instantly be able to play it. Ready to play?
+                game you want to play then you'll instantly be able to play it.
+                Ready to play?
               </p>
-              <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
-                  <Link href="/register">
-                    <div className="bg-blue-500 hover:bg-blue-700 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg">
-                      Register Now
-                    </div>
-                  </Link>
-              </div>
+              {!cookies.accessToken ||
+                (!cookies.userId ? (
+                  <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
+                    <Link href="/register">
+                      <div className="bg-indigo-500 hover:bg-indigo-600 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg">
+                        Register Now
+                      </div>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
+                    <Link href="/list-games">
+                      <div className="bg-indigo-500 hover:bg-indigo-600 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg">
+                        Play Now
+                      </div>
+                    </Link>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
