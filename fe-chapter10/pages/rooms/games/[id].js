@@ -28,13 +28,16 @@ export default function Game() {
       })
       .then(async (res) => {
         const initialRoom = res.data;
-        await setRoom(initialRoom);
-        const _isMyTurn = (userId === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
-          (userId === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
-        await setIsMyTurn(_isMyTurn);
+        await setRoom(() => initialRoom);
+        let _isMyTurn;
         if (initialRoom.hostUserId !== userId && initialRoom.guestUserId === null) {
           await handleGuestJoin();
+          _isMyTurn = true
+        } else {
+          _isMyTurn = (userId === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
+            (userId === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
         }
+        await setIsMyTurn(_isMyTurn);
       })
       .catch((e) => alert(e));
   };
