@@ -121,7 +121,7 @@ export default function Room() {
         .then((result) => {
           if (result.dismiss !== 'cancel') {
             _axios
-              .get(`/rooms/join/${room.roomCode}`, {
+              .get(`/room/join/${room.roomCode}`, {
                 headers: {
                   Authorization: `Bearer ${authToken}`,
                 },
