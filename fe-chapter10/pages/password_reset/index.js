@@ -15,8 +15,6 @@ function password_reset() {
   const dispatch = useDispatch();
   const { isLoggedIn, isResetting } = useSelector((state) => state.auth);
 
-  var changePasswordUrl = `http://localhost:8001/password_reset/reset`
-
   useEffect(() => {
     if (isLoggedIn) {
       router.push('/');
@@ -26,16 +24,11 @@ function password_reset() {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  function SetResetUrl() {
-    changePasswordUrl
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(startResetting());
-    SetResetUrl();
     _axios
-      .post('http://localhost:8000/email', values)
+      .post('/email', values)
       .then((res) => {
         dispatch(stopResetting());
         router.push('/password_reset/sent');
