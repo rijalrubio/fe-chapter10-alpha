@@ -7,17 +7,20 @@ import {useEffect, useState} from "react";
 import _axios from "../../../helper/axios";
 import {useCookies} from "react-cookie";
 import {useRouter} from "next/router";
+import Swal from "sweetalert2";
 
 export default function Game() {
   const router = useRouter();
   const [cookies] = useCookies(["accessToken", "userId"]);
   const [room, setRoom] = useState();
+  const [hasSelected, setHasSelected] = useState(false)
   const authToken = cookies.accessToken;
   const user = cookies.userId;
   let userId;
   const [isMyTurn, setIsMyTurn] = useState(false);
+  const [isRoundFinished, setIsRoundFinished] = useState(false);
 
-  const fetchRoom = async () => {
+  const fetchRoom = async (isFirstTime) => {
     const { id } = router.query;
     userId = user.id;
     await _axios
@@ -31,15 +34,31 @@ export default function Game() {
         await setRoom(() => initialRoom);
         let _isMyTurn;
         if (initialRoom.hostUserId !== userId && initialRoom.guestUserId === null) {
-          await handleGuestJoin();
+          if (isFirstTime) await handleGuestJoin();
           _isMyTurn = true
         } else {
           _isMyTurn = (userId === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
             (userId === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
         }
         await setIsMyTurn(_isMyTurn);
+        const _isRoundFinished = room && (room.isHostWinRound === true || room.isGuestWinRound === true);
+        await setIsRoundFinished(_isRoundFinished)
+        console.log(initialRoom); // TODO: Delete
       })
       .catch((e) => alert(e));
+  };
+
+  const checkLogin = async () => {
+    if (authToken === undefined || authToken === 'undefined') {
+      await Swal.fire({
+        title: 'You Need To Login First',
+        confirmButtonColor: '#3b82f6',
+        icon: 'error',
+      });
+      await router.replace('/login');
+    } else {
+      await fetchRoom(true);
+    }
   };
 
   const handleGuestJoin = async (roomId) => {
@@ -60,8 +79,7 @@ export default function Game() {
   useEffect(() => {
     (async () => {
       if (router.isReady) {
-        await fetchRoom();
-        ;
+        await checkLogin();
       }
     })();
   }, [router.isReady]);
@@ -93,7 +111,6 @@ export default function Game() {
   const isUserWin =
     room && ((userId === room.hostUserId && room.isHostWinRound) ||
       (userId === room.guestUserId && room.isGuestWinRound));
-  const isRoundFinished = room && (room.isHostWinRound === true || room.isGuestWinRound);
 
   const handleHostSelection = async (hostSelection) => {
     let updatedRoom = { ...room };
@@ -105,7 +122,22 @@ export default function Game() {
       (userId === updatedRoom.hostUserId && (updatedRoom.turn - 1) % 2 === 0) ||
       (userId === updatedRoom.guestUserId && (updatedRoom.turn - 1) % 2 === 1),
     );
-    console.log(hostSelection);
+
+    console.log(updatedRoom.id);
+    await _axios
+      .put("/game/update", {
+          roomId: updatedRoom.id,
+          updatedValues: {
+            hostScore: 0,
+          },
+        }, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        },
+      ).then((res) => {
+        console.log(res);
+      });
   };
 
   const handleGuestSelection = async (guestSelection) => {
@@ -120,8 +152,9 @@ export default function Game() {
     );
   };
 
-  const handleRefresh = () => {
-    console.log("Refreshing.."); // TODO
+  const handleRefresh = async () => {
+    console.log("Refreshing.."); // TODO delete
+    await fetchRoom(false)
   };
 
   if (room) {
@@ -165,7 +198,7 @@ export default function Game() {
           />
           <div className="flex flex-col justify-between h-full items-center">
             <div />
-            {isRoundFinished ? (
+            {isRoundFinished && ((userId === room.guestUserId && hasSelected) || true) ? (
               <div
                 className={`px-8 py-10 rounded-2xl text-center ${
                   isUserWin ? "bg-green-200" : "bg-red-200"
