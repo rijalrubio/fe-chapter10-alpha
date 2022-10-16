@@ -5,6 +5,7 @@ export const authSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     isLoggingIn: false,
+    isResetting: false,
     token: null,
   },
   reducers: {
@@ -13,6 +14,12 @@ export const authSlice = createSlice({
     },
     stopLoggingIn: state => {
       state.isLoggingIn = false;
+    },
+    startResetting: state => {
+      state.isResetting = true;
+    },
+    stopResetting: state => {
+      state.isResetting = false;
     },
     // reducer to update state to loggin is true and add jwt token
     setLogin: (state, action) => {
@@ -28,5 +35,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { startLoggingIn, stopLoggingIn, setLogin, setLogout } = authSlice.actions;
+export const { startLoggingIn, stopLoggingIn, 
+               setLogin, setLogout,  
+               startResetting, stopResetting} = authSlice.actions;
 export default authSlice.reducer;
