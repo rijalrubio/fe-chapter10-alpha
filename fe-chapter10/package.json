@@ -9,23 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.3",
-    "@heroicons/react": "^2.0.12",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@headlessui/react": "^1.7.3",
+    "@heroicons/react": "^2.0.12",
     "@reduxjs/toolkit": "^1.8.6",
     "@tailwindcss/forms": "^0.5.3",
     "axios": "^0.27.2",
     "jwt-decode": "^3.1.2",
     "next": "12.3.1",
     "react": "18.2.0",
-    "sweetalert2": "^11.4.38",
-    "react-dom": "18.2.0",
-    "sweet-alert": "^2.0.5",
     "react-cookie": "^4.1.1",
+    "react-dom": "18.2.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.1",
+    "sweet-alert": "^2.0.5",
+    "sweetalert2": "^11.4.38",
     "sweetalert2-react-content": "^5.0.3"
   },
   "devDependencies": {

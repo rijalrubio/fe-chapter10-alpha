@@ -36,7 +36,7 @@ export default function Leaderboard() {
           <div className="p-1.5 w-full inline-block align-middle">
             <div className="overflow-hidden border rounded-lg">
               <table className="min-w-full shadow-md divide-y divide-gray-200">
-                <thead className="bg-indigo-600">
+                <thead className="bg-indigo-500">
                   <tr>
                     <th
                       scope="col"
