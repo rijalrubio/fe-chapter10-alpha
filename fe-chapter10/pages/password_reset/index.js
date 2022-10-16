@@ -28,7 +28,7 @@ function password_reset() {
     e.preventDefault();
     dispatch(startResetting());
     _axios
-      .post('/email', values)
+      .post('/email', {email:values.email, url:window.location.origin})
       .then((res) => {
         dispatch(stopResetting());
         router.push('/password_reset/sent');
