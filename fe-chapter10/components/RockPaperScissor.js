@@ -1,12 +1,12 @@
 import Image from "next/image";
 
-export default function RockPaperScissor({ userSelection, onSelect, isDisabled }) {
+export default function RockPaperScissor({ userSelection, onSelect, isDisabled, isShowResult }) {
   return (
     <div className="flex flex-col w-72 gap-4">
       <button
         disabled={isDisabled}
         className={`basis-1/3 p-4 transition duration-200  bg-slate-200
-                  rounded-lg ${userSelection === 1 ? "border border-4 border-violet-600" : ""} 
+                  rounded-lg ${userSelection === 1 && isShowResult ? "border border-4 border-violet-600" : ""} 
                   ${!isDisabled ? "hover:scale-105 hover:bg-slate-300" : "cursor-not-allowed"}`}
         onClick={async () => await onSelect(1)}
       >
@@ -21,7 +21,7 @@ export default function RockPaperScissor({ userSelection, onSelect, isDisabled }
       <button
         disabled={isDisabled}
         className={`basis-1/3 p-4 transition duration-200  bg-slate-200
-                  rounded-lg ${userSelection === 2 ? "border border-4 border-violet-600" : ""} 
+                  rounded-lg ${userSelection === 2 && isShowResult ? "border border-4 border-violet-600" : ""} 
                   ${!isDisabled ? "hover:scale-105 hover:bg-slate-300" : "cursor-not-allowed"}`}
         onClick={async () => await onSelect(2)}
       >
@@ -36,7 +36,7 @@ export default function RockPaperScissor({ userSelection, onSelect, isDisabled }
       <button
         disabled={isDisabled}
         className={`basis-1/3 p-4 transition duration-200  bg-slate-200
-                  rounded-lg ${userSelection === 3 ? "border border-4 border-violet-600" : ""} 
+                  rounded-lg ${userSelection === 3 && isShowResult ? "border border-4 border-violet-600" : ""} 
                   ${!isDisabled ? "hover:scale-105 hover:bg-slate-300" : "cursor-not-allowed"}`}
         onClick={async () => await onSelect(3)}
       >

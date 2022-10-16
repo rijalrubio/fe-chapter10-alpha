@@ -13,16 +13,14 @@ export default function Game() {
   const router = useRouter();
   const [cookies] = useCookies(["accessToken", "userId"]);
   const [room, setRoom] = useState();
-  const [hasSelected, setHasSelected] = useState(false)
+  const [hasSelected, setHasSelected] = useState(false);
   const authToken = cookies.accessToken;
   const user = cookies.userId;
-  let userId;
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [isRoundFinished, setIsRoundFinished] = useState(false);
 
   const fetchRoom = async (isFirstTime) => {
     const { id } = router.query;
-    userId = user.id;
     await _axios
       .get(`/game/${id}`, {
         headers: {
@@ -33,29 +31,29 @@ export default function Game() {
         const initialRoom = res.data;
         await setRoom(() => initialRoom);
         let _isMyTurn;
-        if (initialRoom.hostUserId !== userId && initialRoom.guestUserId === null) {
-          if (isFirstTime) await handleGuestJoin();
-          _isMyTurn = true
+        if (initialRoom.hostUserId !== user.id && initialRoom.guestUserId === null) {
+          if (isFirstTime) await handleGuestJoin(initialRoom.id);
+          _isMyTurn = true;
         } else {
-          _isMyTurn = (userId === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
-            (userId === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
+          _isMyTurn = (user.id === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
+            (user.id === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
         }
         await setIsMyTurn(_isMyTurn);
         const _isRoundFinished = room && (room.isHostWinRound === true || room.isGuestWinRound === true);
-        await setIsRoundFinished(_isRoundFinished)
+        await setIsRoundFinished(_isRoundFinished);
         console.log(initialRoom); // TODO: Delete
       })
       .catch((e) => alert(e));
   };
 
   const checkLogin = async () => {
-    if (authToken === undefined || authToken === 'undefined') {
+    if (authToken === undefined || authToken === "undefined") {
       await Swal.fire({
-        title: 'You Need To Login First',
-        confirmButtonColor: '#3b82f6',
-        icon: 'error',
+        title: "You Need To Login First",
+        confirmButtonColor: "#3b82f6",
+        icon: "error",
       });
-      await router.replace('/login');
+      await router.replace("/login");
     } else {
       await fetchRoom(true);
     }
@@ -66,7 +64,7 @@ export default function Game() {
       .put("/game/update", {
           roomId,
           updatedValues: {
-            guestUserId: userId,
+            guestUserId: user.id,
           },
         }, {
           headers: {
@@ -109,8 +107,8 @@ export default function Game() {
 
   const currentRound = room ? Math.floor((room.turn - 1) / 2) + 1 : 0;
   const isUserWin =
-    room && ((userId === room.hostUserId && room.isHostWinRound) ||
-      (userId === room.guestUserId && room.isGuestWinRound));
+    room && ((user.id === room.hostUserId && room.isHostWinRound) ||
+      (user.id === room.guestUserId && room.isGuestWinRound));
 
   const handleHostSelection = async (hostSelection) => {
     let updatedRoom = { ...room };
@@ -119,24 +117,30 @@ export default function Game() {
 
     await setRoom(updatedRoom);
     await setIsMyTurn(
-      (userId === updatedRoom.hostUserId && (updatedRoom.turn - 1) % 2 === 0) ||
-      (userId === updatedRoom.guestUserId && (updatedRoom.turn - 1) % 2 === 1),
+      (user.id === updatedRoom.hostUserId && (updatedRoom.turn - 1) % 2 === 0) ||
+      (user.id === updatedRoom.guestUserId && (updatedRoom.turn - 1) % 2 === 1),
     );
 
-    console.log(updatedRoom.id);
     await _axios
       .put("/game/update", {
           roomId: updatedRoom.id,
           updatedValues: {
-            hostScore: 0,
+            hostSelection,
+            turn: updatedRoom.turn,
           },
         }, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
         },
-      ).then((res) => {
-        console.log(res);
+      ).then(async (res) => {
+        const initialRoom = res.data;
+        console.log("Host has selected..");
+        console.log(initialRoom);
+        await setRoom(() => initialRoom);
+        const _isMyTurn = (userId === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
+          (userId === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
+        await setIsMyTurn(_isMyTurn);
       });
   };
 
@@ -150,16 +154,38 @@ export default function Game() {
       (userId === updatedRoom.hostUserId && (updatedRoom.turn - 1) % 2 === 0) ||
       (userId === updatedRoom.guestUserId && (updatedRoom.turn - 1) % 2 === 1),
     );
+
+    await _axios
+      .put("/game/update", {
+          roomId: updatedRoom.id,
+          updatedValues: {
+            guestSelection,
+            turn: updatedRoom.turn,
+          },
+        }, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        },
+      ).then(async (res) => {
+        const initialRoom = res.data;
+        console.log("Guest has selected..");
+        console.log(initialRoom);
+        await setRoom(() => initialRoom);
+        const _isMyTurn = (userId === initialRoom.hostUserId && (initialRoom.turn - 1) % 2 === 0) ||
+          (userId === initialRoom.guestUserId && (initialRoom.turn - 1) % 2 === 1);
+        await setIsMyTurn(_isMyTurn);
+      });
   };
 
   const handleRefresh = async () => {
     console.log("Refreshing.."); // TODO delete
-    await fetchRoom(false)
+    await fetchRoom(false);
   };
 
   if (room) {
     return (
-      <div className="bg-gray-100 h-screen w-full py-4 px-8 flex flex-col">
+      <div className="bg-gray-100 h-[calc(100vh-64px)] w-full py-4 px-8 flex flex-col">
         <div className="text-indigo-500">
           <Link href="/rooms">Back</Link>
         </div>
@@ -193,12 +219,12 @@ export default function Game() {
           <RockPaperScissor
             userSelection={room.hostSelection}
             onSelect={handleHostSelection}
-            isDisabled={room.guestUserId === null || (userId !== room.hostUserId && isMyTurn === false)}
-            // isDisabled={isMyTurn === false} // TODO: Delete
+            isDisabled={room.guestUserId === null || user.id !== room.hostUserId || (room.hostUserId === user.id && isMyTurn === false)}
+            isShowResult={room.hostUserId === user.id || room.isTurnFinished}
           />
           <div className="flex flex-col justify-between h-full items-center">
             <div />
-            {isRoundFinished && ((userId === room.guestUserId && hasSelected) || true) ? (
+            {room.isTurnFinished ? (
               <div
                 className={`px-8 py-10 rounded-2xl text-center ${
                   isUserWin ? "bg-green-200" : "bg-red-200"
@@ -243,7 +269,8 @@ export default function Game() {
           <RockPaperScissor
             userSelection={room.guestSelection}
             onSelect={handleGuestSelection}
-            isDisabled={userId !== room.guestUserId}
+            isDisabled={user.id !== room.guestUserId || (room.guestUserId === user.id && isMyTurn === false)}
+            isShowResult={room.guestUserId === user.id || room.isTurnFinished}
           />
         </div>
       </div>
