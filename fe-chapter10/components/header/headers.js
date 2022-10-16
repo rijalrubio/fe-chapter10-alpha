@@ -37,6 +37,7 @@ export default function Header() {
   const handleLogout = () => {
     console.log('proses logout');
     removeCookie('accessToken', '');
+    removeCookie('userId', '');
     dispatch(setLogout());
   };
 

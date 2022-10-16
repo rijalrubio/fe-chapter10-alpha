@@ -8,8 +8,17 @@ import _axios from "../../../helper/axios";
 import {useCookies} from "react-cookie";
 import {useRouter} from "next/router";
 import Swal from "sweetalert2";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from 'react-share';
 
 export default function Game() {
+  const shareURL = 'https://fe-chapter10-alpha.vercel.app/';
   const router = useRouter();
   const [cookies] = useCookies(["accessToken", "userId"]);
   const [room, setRoom] = useState();
@@ -78,29 +87,6 @@ export default function Game() {
       }
     })();
   }, [router.isReady]);
-
-  // const initialRoom = {
-  //   id: 1,
-  //   roomName: 'My Room',
-  //   roomCode: 'AGJAA',
-  //   hostUserId: 1,
-  //   guestUserId: 2,
-  //   hostScore: 0,
-  //   guestScore: 0,
-  //   isFinished: false,
-  //   turn: 1,
-  //   hostSelection: 0,
-  //   guestSelection: 0,
-  //   isHostWantReplay: undefined, //
-  //   isGuestWantReplay: undefined, //
-  //   isHostWinRound: true, //
-  //   isGuestWinRound: false, //
-  //   createdAt: '2022-09-22T09:37:20.759Z',
-  //   updatedAt: '2022-09-22T09:37:20.759Z',
-  //   hostUserName: 'Dimas',
-  //   guestUserName: 'Ashidiqi',
-  // };
-  //
 
   const currentRound = room ? Math.floor((room.turn - 1) / 2) + 1 : 0;
   const isUserWin =
@@ -279,9 +265,22 @@ export default function Game() {
 
   if (room) {
     return (
-      <div className="bg-gray-100 h-[calc(100vh-64px)] w-full py-4 px-8 flex flex-col">
-        <div className="text-indigo-500">
+      <div className="bg-gray-100 h-[calc(100vh-64px)] w-ful pt-2 pb-4 px-8 flex flex-col">
+        <div className="text-indigo-500 flex w-full justify-between items-center">
           <Link href="/rooms">Back</Link>
+            {room.isFinished && (
+              <div className="flex flex-row gap-x-4">
+                <FacebookShareButton url={shareURL}>
+                  <FacebookIcon size={40} round={true} />
+                </FacebookShareButton>
+                <TwitterShareButton url={shareURL}>
+                  <TwitterIcon size={40} round={true} />
+                </TwitterShareButton>
+                <WhatsappShareButton url={shareURL}>
+                  <WhatsappIcon size={40} round={true} />
+                </WhatsappShareButton>
+              </div>
+            )}
         </div>
 
         {/* Game Information */}
@@ -318,9 +317,6 @@ export default function Game() {
           />
           <div className="flex flex-col justify-between h-full items-center">
             <div />
-            {function () {
-              console.log("test: ", room);
-            }()}
             {room.isFinished || (room.isTurnFinished && isShoResult) ? (
               <div
                 className={`px-8 py-10 rounded-2xl text-center ${
@@ -352,17 +348,19 @@ export default function Game() {
                 {room.guestUserId === null ? "Waiting.." : isMyTurn ? "Your Turn" : "Enemy's Turn"}
               </p>
             )}
-            <button
-              className="bg-violet-600 hover:bg-violet-500 h-16 w-16 rounded-full"
-              onClick={handleRefresh}
-              disabled={!(user.id === room.hostUserId || user.id === room.guestUserId)}
-            >
-              <Image
-                src="/refresh.png"
-                height={40}
-                width={40}
-              />
-            </button>
+            <div className="flex items-center gap-x-4">
+              <button
+                className="bg-violet-600 hover:bg-violet-500 h-16 w-16 rounded-full"
+                onClick={handleRefresh}
+                disabled={!(user.id === room.hostUserId || user.id === room.guestUserId)}
+              >
+                <Image
+                  src="/refresh.png"
+                  height={40}
+                  width={40}
+                />
+              </button>
+            </div>
           </div>
           <RockPaperScissor
             userSelection={room.guestSelection}

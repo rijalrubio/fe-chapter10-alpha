@@ -16,7 +16,7 @@ export default function OnGoing({ room, onClick }) {
     return (
       <div
         className={
-          'bg-slate-500 hover:bg-slate-400 border px-8 pt-4 pb-8 rounded-lg cursor-pointer'
+          'bg-slate-500 hover:bg-slate-400 px-8 pt-4 pb-8 rounded-lg cursor-pointer'
         }
         onClick={onClick}
       >
@@ -27,7 +27,9 @@ export default function OnGoing({ room, onClick }) {
           <p className="font-semibold text-lg leading-normal text-white">
             {room.roomName}
           </p>
-          <p className="text-white text-sm leading-normal">Room Full</p>
+          <p className="text-white text-sm leading-normal font-semibold">
+            Room Full
+          </p>
         </div>
         <p className="text-4xl text-center mt-4">
           {room.hostScore} - {room.guestScore}
@@ -53,7 +55,7 @@ export default function OnGoing({ room, onClick }) {
             <p className="font-semibold text-lg leading-normal">
               {room.roomName}
             </p>
-            <p className="text-slate-600 text-sm leading-normal">
+            <p className="text-slate-600 text-sm leading-normal font-semibold">
               {isMyTurn ? 'Your Turn' : 'Enemy Turn'}
             </p>
           </div>
