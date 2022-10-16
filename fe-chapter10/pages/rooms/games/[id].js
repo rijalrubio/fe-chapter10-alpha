@@ -4,9 +4,18 @@ import GuestCard from '../../../components/GuestCard';
 import Image from 'next/image';
 import RockPaperScissor from '../../../components/RockPaperScissor';
 import { useEffect, useState } from 'react';
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from 'react-share';
 
 export default function Game() {
   const userId = 1;
+  const shareURL = 'https://fe-chapter10-alpha.vercel.app/';
 
   const initialRoom = {
     id: 1,
@@ -73,7 +82,7 @@ export default function Game() {
   };
 
   return (
-    <div className="bg-gray-100 h-screen w-full py-4 px-8 flex flex-col">
+    <div className="bg-gray-100 h-[calc(100vh-64px)] w-full py-4 px-8 flex flex-col">
       {/* Back Button */}
       <div className="text-indigo-500">
         <Link href="/rooms">Back</Link>
@@ -112,7 +121,6 @@ export default function Game() {
           isDisabled={isMyTurn === false} // TODO: Delete
         />
         <div className="flex flex-col justify-between h-full items-center">
-          <div />
           {isRoundFinished ? (
             <div
               className={`px-8 py-10 rounded-2xl text-center ${
@@ -144,12 +152,27 @@ export default function Game() {
               {isMyTurn ? 'Your' : "Enemy's"} Turn
             </p>
           )}
-          <button
-            className="bg-violet-600 hover:bg-violet-500 h-16 w-16 rounded-full"
-            onClick={handleRefresh}
-          >
-            <Image src="/refresh.png" height={40} width={40} />
-          </button>
+          <div className="flex flex-col items-center">
+            <button
+              className="bg-violet-600 hover:bg-violet-500 h-16 w-16 rounded-full mb-4"
+              onClick={handleRefresh}
+            >
+              <Image src="/refresh.png" height={40} width={40} />
+            </button>
+            {initialRoom.isFinished && (
+              <div className="flex flex-row">
+                <FacebookShareButton url={shareURL}>
+                  <FacebookIcon size={40} round={true} />
+                </FacebookShareButton>
+                <TwitterShareButton url={shareURL}>
+                  <TwitterIcon size={40} round={true} />
+                </TwitterShareButton>
+                <WhatsappShareButton url={shareURL}>
+                  <WhatsappIcon size={40} round={true} />
+                </WhatsappShareButton>
+              </div>
+            )}
+          </div>
         </div>
         <RockPaperScissor
           userSelection={room.guestSelection}
