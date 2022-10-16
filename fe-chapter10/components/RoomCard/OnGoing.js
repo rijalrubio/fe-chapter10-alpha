@@ -4,12 +4,12 @@ import Link from 'next/link';
 export default function OnGoing({ room, onClick }) {
   const [cookies] = useCookies(['userId']);
   const isMyTurn =
-    (room.hostUserId === cookies.userId.id && (room.turn - 1) % 2 === 1) ||
-    (room.guestUserId === cookies.userId.id && (room.turn - 1) % 2 === 0);
+    (room.hostUserId === cookies.userId.id && (room.turn - 1) % 2 === 0) ||
+    (room.guestUserId === cookies.userId.id && (room.turn - 1) % 2 === 1);
   const isRoomFull =
     room.hostUserId &&
     room.guestUserId &&
-    (room.hostUserId !== cookies.userId.id ||
+    (room.hostUserId !== cookies.userId.id &&
       room.guestUserId !== cookies.userId.id);
 
   if (isRoomFull) {
