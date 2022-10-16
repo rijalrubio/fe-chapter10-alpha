@@ -10,19 +10,29 @@ import {
   faLock,
   faFileText,
 } from '@fortawesome/free-solid-svg-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setRegister,
+  startRegistration,
+  stopRegistration,
+} from '../../share/redux/registerSlice';
 
 const Profile = () => {
   const MySwal = withReactContent(Swal);
   const [values, setValues] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [cookies] = useCookies(['accessToken', 'userId']);
   const router = useRouter();
+  const { isRegistering } = useSelector((state) => state.register);
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
+    setIsLoading(true)
     _axios
       .get(`/user`, {
         headers: {
@@ -31,6 +41,7 @@ const Profile = () => {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setValues(res.data);
       })
       .catch((err) =>
@@ -43,26 +54,28 @@ const Profile = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(startRegistration());
     _axios
       .put('/user', values, {
         headers: {
-          // 'Access-Control-Allow-Origin': true,
           Authorization: `Bearer ${cookies.accessToken}`,
         },
       })
       .then((res) => {
         MySwal.fire({
-          title: <p>Edit data successfully!</p>,
+          title: <p>Changes saved successfully!</p>,
           icon: 'success',
         });
+        dispatch(setRegister());
         router.push(`/`);
       })
-      .catch((err) =>
+      .catch((err) => {
         MySwal.fire({
           title: <p>{err.data.message || err.data.msg}</p>,
           icon: 'error',
-        })
-      );
+        });
+        dispatch(stopRegistration());
+      });
   };
 
   return (
@@ -94,7 +107,7 @@ const Profile = () => {
                 name="fullname"
                 type="fullname"
                 placeholder="Fullname"
-                value={values.fullname}
+                value={isLoading ? 'loading...' : values.fullname}
                 onChange={handleOnChange}
               />
               <span className="flex items-center absolute text-zinc-500 w-full h-full pointer-events-none pl-9 bottom-0 left-0">
@@ -107,7 +120,7 @@ const Profile = () => {
                 name="email"
                 type="email"
                 placeholder="Email"
-                value={values.email}
+                value={isLoading ? 'loading...' : values.email}
                 onChange={handleOnChange}
               />
               <span className="flex items-center absolute text-zinc-500 w-full h-full pointer-events-none pl-9 bottom-0 left-0">
@@ -162,9 +175,42 @@ const Profile = () => {
               <button
                 className="w-full bg-indigo-500 hover:bg-indigo-600 text-white  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
+                style={{
+                  display: !isRegistering ? 'block' : 'none',
+                }}
               >
                 Save Changes
-              </button>
+              </button> 
+              <button
+                  style={{
+                    display: isRegistering ? 'flex' : 'none',
+                  }}
+                  type="submit"
+                  className="w-full hover:bg-indigo-600 bg-indigo-500 text-white font-bold px-4 py-2 leading-6  rounded focus:outline-none focus:shadow-outline"
+                  disabled
+                >
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </button>
             </div>
           </form>
         </div>
