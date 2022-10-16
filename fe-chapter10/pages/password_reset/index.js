@@ -35,7 +35,7 @@ function password_reset() {
     dispatch(startResetting());
     SetResetUrl();
     _axios
-      .post('/email', values)
+      .post('http://localhost:8000/email', values)
       .then((res) => {
         dispatch(stopResetting());
         router.push('/password_reset/sent');
@@ -43,12 +43,15 @@ function password_reset() {
       .catch((err) => {
         dispatch(stopResetting());
         let message = '';
+        debugger;
         if (err.response && err.response.data) {
           err.response.data.errors.forEach((element) => {
             message = message.concat(element.msg, ' ');
           });
-        } else {
+        } else if(err.message) {
           message = err.message;
+        }else {
+          message = err.data;
         }
 
         MySwal.fire({
