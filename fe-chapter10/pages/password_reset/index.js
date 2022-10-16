@@ -35,7 +35,7 @@ function password_reset() {
     dispatch(startResetting());
     SetResetUrl();
     _axios
-      .post('http://localhost:8000/email', values)
+      .post('/email', values)
       .then((res) => {
         dispatch(stopResetting());
         router.push('/password_reset/sent');
