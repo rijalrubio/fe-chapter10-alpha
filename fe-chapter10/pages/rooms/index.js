@@ -1,5 +1,6 @@
 import { RoomCard } from '../../components';
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
@@ -10,6 +11,7 @@ export default function Room() {
   const router = useRouter();
   const [cookies] = useCookies(['accessToken', 'userId']);
   const authToken = cookies.accessToken;
+  const MySwal = withReactContent(Swal);
 
   const fetchRooms = () => {
     _axios
@@ -27,7 +29,7 @@ export default function Room() {
 
   const checkLogin = async () => {
     if (authToken === 'undefined') {
-      await Swal.fire({
+      await MySwal.fire({
         title: 'You Need To Login First',
         confirmButtonColor: '#3b82f6',
         icon: 'error',
@@ -45,7 +47,7 @@ export default function Room() {
   }, []);
 
   const handleCreate = async () => {
-    const { value: roomName } = await Swal.fire({
+    const { value: roomName } = await MySwal.fire({
       title: 'How Should We Call Your Room?',
       confirmButtonColor: '#3b82f6',
       input: 'text',
@@ -72,11 +74,11 @@ export default function Room() {
       .then(() => {
         fetchRooms();
       })
-      .catch((e) => alert(e));
+      .catch((e) => console.log(e));
   };
 
   const handleJoin = async () => {
-    const { value: roomCode } = await Swal.fire({
+    const { value: roomCode } = await MySwal.fire({
       title: 'What is the Room Code?',
       confirmButtonColor: '#3b82f6',
       input: 'text',
@@ -109,7 +111,7 @@ export default function Room() {
 
   const handleClick = async (e, room) => {
     if (cookies.userId.id !== room.hostUserId) {
-      await Swal.fire({
+      await MySwal.fire({
         title: 'Are you sure to join this room?',
         confirmButtonColor: '#3b82f6',
         showCancelButton: true,
@@ -119,7 +121,7 @@ export default function Room() {
         closeOnCancel: true,
       })
         .then((result) => {
-          if (result.dismiss !== 'cancel') {
+          if (result.value) {
             _axios
               .get(`/room/join/${room.roomCode}`, {
                 headers: {
@@ -135,8 +137,10 @@ export default function Room() {
               .catch((e) => {
                 alert(e);
               });
-          } else {
+          } else if (result.dismiss == 'cancel') {
             console.log('cancel');
+          } else if (result.dismiss == 'esc') {
+            console.log('cancle-esc**strong text**');
           }
         })
         .catch(function () {
@@ -144,7 +148,6 @@ export default function Room() {
         });
     } else {
       router.replace(`/rooms/games/${room.id}`);
-      // navigate(`/rooms/${room.id}`, { state: room });
     }
   };
 
