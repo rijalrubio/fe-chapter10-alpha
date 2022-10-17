@@ -36,9 +36,10 @@ export default function Header() {
   // handle logout
   const handleLogout = () => {
     console.log('proses logout');
+    dispatch(setLogout());
+    router.replace('/');
     removeCookie('accessToken', '');
     removeCookie('userId', '');
-    dispatch(setLogout());
   };
 
   useEffect(() => {

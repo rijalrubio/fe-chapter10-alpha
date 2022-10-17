@@ -9,8 +9,8 @@ export default function OnGoing({ room, onClick }) {
   const isRoomFull =
     room.hostUserId &&
     room.guestUserId &&
-    (room.hostUserId !== cookies.userId.id &&
-      room.guestUserId !== cookies.userId.id);
+    room.hostUserId !== cookies.userId.id &&
+    room.guestUserId !== cookies.userId.id;
 
   if (isRoomFull) {
     return (
@@ -20,20 +20,24 @@ export default function OnGoing({ room, onClick }) {
         }
         onClick={onClick}
       >
-        <div className="flex justify-between w-56 items-center text-white">
-          {room.roomCode}
-        </div>
-        <div className="flex justify-between w-56 items-center pt-2">
-          <p className="font-semibold text-lg leading-normal text-white">
-            {room.roomName}
-          </p>
-          <p className="text-white text-sm leading-normal font-semibold">
-            Room Full
-          </p>
-        </div>
-        <p className="text-4xl text-center mt-4">
-          {room.hostScore} - {room.guestScore}
-        </p>
+        <Link href={`/rooms/games/${room.id}`}>
+          <a>
+            <div className="flex justify-between w-56 items-center text-white">
+              {room.roomCode}
+            </div>
+            <div className="flex justify-between w-56 items-center pt-2">
+              <p className="font-semibold text-lg leading-normal text-white">
+                {room.roomName}
+              </p>
+              <p className="text-white text-sm leading-normal font-semibold">
+                Room Full
+              </p>
+            </div>
+            <p className="text-4xl text-center mt-4">
+              {room.hostScore} - {room.guestScore}
+            </p>
+          </a>
+        </Link>
       </div>
     );
   }
