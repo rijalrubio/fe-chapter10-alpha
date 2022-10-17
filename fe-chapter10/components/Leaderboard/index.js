@@ -69,7 +69,7 @@ export default function Leaderboard() {
                       </td>
                       <td className="px-6 py-4 text-sm text-left text-gray-800 whitespace-nowrap">
                         {/* sementara biar keliatan ada poinnya */}
-                        {Math.floor(Math.random() * data.totalPoint)}
+                        {data.totalPoint}
                         {/* {data.totalPoint} */}
                       </td>
                     </tr>
