@@ -79,7 +79,7 @@ export default function Finished({ room, onClick }) {
                     </p>
                   </div>
                   <p className="text-4xl text-center mt-4 text-yellow-600">
-                    {room.hostScore} -{room.guestScore}
+                    {room.hostScore} - {room.guestScore}
                   </p>
                 </a>
               </Link>

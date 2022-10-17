@@ -25,13 +25,13 @@ export default function LandingPage() {
                 Ready to play?
               </p>
               {
-                  <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
-                    <Link href={ !isLoggedIn ? "/register" : "/list-games" }>
-                      <div className="bg-indigo-500 hover:bg-indigo-600 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg">
-                      { !isLoggedIn ? "Register Now" :  "Play Now"}
-                      </div>
-                    </Link>
-                  </div>
+                <div className="flex gap-x-2 mt-4 justify-center md:justify-start">
+                  <Link href={!isLoggedIn ? '/register' : '/list-games'}>
+                    <div className="bg-indigo-500 hover:bg-indigo-600 py-2 w-40 text-white font-semibold text-lg text-center rounded-lg cursor-pointer">
+                      {!isLoggedIn ? 'Register Now' : 'Play Now'}
+                    </div>
+                  </Link>
+                </div>
               }
             </div>
           </div>
