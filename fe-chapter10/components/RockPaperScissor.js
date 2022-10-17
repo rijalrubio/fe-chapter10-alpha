@@ -4,6 +4,7 @@ export default function RockPaperScissor({
   userSelection,
   onSelect,
   isDisabled,
+  isShowResult
 }) {
   return (
     <div className="flex flex-col w-72 gap-4">
@@ -11,7 +12,7 @@ export default function RockPaperScissor({
         disabled={isDisabled}
         className={`basis-1/3 p-4 transition duration-200 hover:scale-105 bg-slate-200 hover:bg-slate-300 
           rounded-lg ${
-            userSelection === 1 ? 'border-4 border-violet-600' : ''
+            userSelection === 1 && isShowResult ? 'border-4 border-violet-600' : ''
           }`}
         onClick={async () => await onSelect(1)}
       >
@@ -23,7 +24,7 @@ export default function RockPaperScissor({
         disabled={isDisabled}
         className={`basis-1/3 p-4 transition duration-200 hover:scale-105 bg-slate-200 hover:bg-slate-300 
                     rounded-lg ${
-                      userSelection === 2 ? 'border-4 border-violet-600' : ''
+                      userSelection === 2 && isShowResult ? 'border-4 border-violet-600' : ''
                     }`}
         onClick={async () => await onSelect(2)}
       >
@@ -35,7 +36,7 @@ export default function RockPaperScissor({
         disabled={isDisabled}
         className={`basis-1/3 p-4 transition duration-200 hover:scale-105 bg-slate-200 hover:bg-slate-300 
                   rounded-lg ${
-                    userSelection === 3 ? 'border-4 border-violet-600' : ''
+                    userSelection === 3 && isShowResult ? 'border-4 border-violet-600' : ''
                   }`}
         onClick={async () => await onSelect(3)}
       >
