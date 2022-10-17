@@ -6,7 +6,7 @@ export default function LandingPage() {
   return (
     <>
       <main className="lg:container mx-auto text-center md:text-left">
-        <div className="flex flex-col md:flex-row h-screen pt-[76px]">
+        <div className="flex flex-col md:flex-row h-[calc(100vh-64px)] pt-[76px]">
           <div className="flex basis-1/5 md:basis-1/2 my-auto relative">
             <img
               src="/game-illustration.png"

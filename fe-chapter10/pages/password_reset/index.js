@@ -28,7 +28,7 @@ function password_reset() {
     e.preventDefault();
     dispatch(startResetting());
     _axios
-      .post('/email', {email:values.email, url:window.location.origin})
+      .post('/email', { email: values.email, url: window.location.origin })
       .then((res) => {
         dispatch(stopResetting());
         router.push('/password_reset/sent');
@@ -41,9 +41,9 @@ function password_reset() {
           err.response.data.errors.forEach((element) => {
             message = message.concat(element.msg, ' ');
           });
-        } else if(err.message) {
+        } else if (err.message) {
           message = err.message;
-        }else {
+        } else {
           message = err.data;
         }
 
@@ -64,22 +64,25 @@ function password_reset() {
                 Reset your password
               </span>
             </div>
-            <div className='px-6 py-4 bg-gray-800 text-gray-100'>
-              Enter your user account's email address and we will send you a password reset link.
+            <div className="px-6 py-4 bg-gray-800 text-gray-100">
+              Enter your user account's email address and we will send you a
+              password reset link.
             </div>
-            <div className="px-6 py-4 relative"><input
-              className="shadow appearance-none border rounded-lg w-full py-2 pr-3 pl-9 text-slate-800 leading-tight focus:outline-none focus:shadow-outline"
-              name="email"
-              type="email"
-              placeholder="Email"
-              onChange={handleChange}
-            />
+            <div className="px-6 py-4 relative">
+              <input
+                className="shadow appearance-none border rounded-lg w-full py-2 pr-3 pl-9 text-slate-800 leading-tight focus:outline-none focus:shadow-outline"
+                name="email"
+                type="email"
+                placeholder="Email"
+                onChange={handleChange}
+              />
               <span className="flex items-center absolute text-zinc-500 w-full h-full pointer-events-none pl-9 bottom-0 left-0">
                 <FontAwesomeIcon icon={faEnvelope} />
               </span>
             </div>
             <div className="px-6 py-4">
-              <button style={{ display: !isResetting ? 'block' : 'none' }}
+              <button
+                style={{ display: !isResetting ? 'block' : 'none' }}
                 className="w-full hover:bg-indigo-600 bg-indigo-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
                 onClick={handleSubmit}
@@ -116,12 +119,15 @@ function password_reset() {
                 </svg>
                 Processing...
               </button>
-
             </div>
           </form>
           <div className="px-6 py-4 flex justify-between">
-            <div className="text-white items-start text-blue-400"><a href="/register">Register</a></div>
-            <div className="text-white items-end text-blue-400"><a href="/login">Login</a></div>
+            <div className=" items-start text-blue-400">
+              <a href="/register">Register</a>
+            </div>
+            <div className=" items-end text-blue-400">
+              <a href="/login">Login</a>
+            </div>
           </div>
         </div>
       </div>
